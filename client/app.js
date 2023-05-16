@@ -10,13 +10,13 @@ const $taskCard = $('.task-card')
 const $incomplete = $('#not_complete')
 const $complete = $('#complete')
 const $NewTaskSearch = $('#NewTaskSearch')
-const URL = 'https://task-app-by-seb.onrender.com/'
+const URL = 'https://task-app-by-seb.onrender.com'
 $results.on('click', '.delete_task', deleteTask)
 
 function createUser() {
     const user_email = $userInput.val()
 
-    fetch(`${URL}/newuser`, {
+    fetch(`${URL}newuser`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ $createUserBtn.on('click', () => {
 
 function signin() {
     const userInput = $userInputSignin.val()
-    fetch(`${URL}/users/${userInput}`)
+    fetch(`${URL}users/${userInput}`)
         .then((response) => response.json())
         .then((data) => {
             console.log(data)
@@ -101,7 +101,7 @@ $userInputSignin.on('keypress', (event) => {
 
 $results.on('click', '.user_task_btn', () => {
     const userId = $('.user_task_btn').attr('id')
-    fetch(`${URL}/tasks/${userId}`)
+    fetch(`${URL}tasks/${userId}`)
         .then((response) => response.json())
         .then((data) => {
             $results.empty()
@@ -167,7 +167,7 @@ function newTask() {
     const newTaskUser = $('.newTodoText').attr('id')
     const newTaskInput = $('.newTodoText').val()
     console.log(newTaskInput)
-    fetch(`${URL}/newtask/${newTaskUser}`, {
+    fetch(`${URL}newtask/${newTaskUser}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
