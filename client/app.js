@@ -207,6 +207,7 @@ $NewTaskSearch.on('keypress', '.newTodoText', (event) => {
         $newTodoText.val('')
     }
 })
+console.log('hello')
 // delete button specific to the user
 function deleteTask(event) {
     const taskId = $(event.target).data('task-id')
