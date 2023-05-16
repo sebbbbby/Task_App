@@ -5,11 +5,11 @@ import validator from 'validator'
 // import bodyParser from "body-parser";
 import dotenv from 'dotenv'
 import cors from 'cors'
-app.use(cors())
 
 const app = express()
 const PORT = 4000
 dotenv.config()
+app.use(cors())
 app.use(express.static('../client'))
 app.use(express.json())
 
