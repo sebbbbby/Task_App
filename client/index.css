@@ -1,0 +1,83 @@
+* {
+    font-family: 'Aleo', serif;
+}
+body {
+    background-color: #f9f9f9;
+}
+
+.welcome-card {
+    text-align: center;
+    border-radius: 10px;
+}
+.container_signup {
+    text-align: center;
+    margin-top: 2%;
+}
+.container_signin {
+    text-align: center;
+    margin-top: 2%;
+}
+input {
+    height: 25px;
+    border: 2px solid rgba(0, 0, 0, 0.185);
+    border-radius: 15px;
+}
+button {
+    border: none;
+    background-color: #a4d0a4;
+    border-radius: 10px;
+}
+.container {
+    display: flex;
+    justify-content: space-evenly;
+}
+.task-container {
+    border: 2px solid black;
+    display: inline-flex;
+    margin-right: 10px;
+    border-radius: 20px;
+    margin-top: 3px;
+    max-width: 200px;
+    flex-direction: column;
+    overflow: overlay;
+}
+.task-card {
+    height: 100px;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 10px;
+    max-width: 100%;
+    word-wrap: break-word;
+}
+.TodoInputDiv {
+    display: grid;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.delete_task {
+    background-color: rgba(255, 0, 0, 0.287);
+}
+#sign_up_container {
+    display: flex;
+    justify-content: space-evenly;
+}
+#results {
+    display: flex;
+    /* justify-content: center; */
+    flex-wrap: wrap;
+}
+
+.newTodoText {
+    text-align: center;
+}
+
+#not_complete {
+    order: 1;
+    flex-grow: 1;
+    width: 50%;
+}
+#complete {
+    order: 2;
+    flex-grow: 1;
+    width: 50%;
+}
