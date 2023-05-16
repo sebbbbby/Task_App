@@ -10,7 +10,7 @@ const $taskCard = $('.task-card')
 const $incomplete = $('#not_complete')
 const $complete = $('#complete')
 const $NewTaskSearch = $('#NewTaskSearch')
-const URL = 'https://task-app-by-seb.onrender.com'
+const URL = 'https://task-app-by-seb.onrender.com/'
 $results.on('click', '.delete_task', deleteTask)
 
 function createUser() {
