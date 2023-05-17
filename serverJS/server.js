@@ -63,7 +63,6 @@ app.get('/tasks/:user_id', (req, res) => {
             }
             let user = result['rows']
             res.send(user)
-            console.log('user ' + user)
         }
     )
 })
@@ -162,7 +161,7 @@ app.patch('/tasks/:user_id/:task_id', (req, res) => {
                 console.log(result.rows[0])
                 const updatedTask = result.rows[0]
                 console.log(updatedTask)
-                res.status(200).send(updatedTask)
+                res.status(200).json(updatedTask)
             }
         )
     } else {
@@ -179,7 +178,7 @@ app.patch('/tasks/:user_id/:task_id', (req, res) => {
                 console.log(result.rows[0])
                 const updatedTask = result.rows[0]
                 console.log(updatedTask)
-                res.status(200).send(updatedTask)
+                res.status(200).json(updatedTask)
             }
         )
     }
