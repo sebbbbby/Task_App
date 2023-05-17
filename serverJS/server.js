@@ -159,8 +159,10 @@ app.patch('/tasks/:user_id/:task_id', (req, res) => {
                     return
                 }
                 //return the task to be added appropraitely
+                console.log(result.rows[0])
                 const updatedTask = result.rows[0]
-                res.status(200).json(updatedTask)
+                console.log(updatedTask)
+                res.status(200).send(updatedTask)
             }
         )
     } else {
@@ -174,8 +176,10 @@ app.patch('/tasks/:user_id/:task_id', (req, res) => {
                     return
                 }
                 //return the task to be added appropraitely
+                console.log(result.rows[0])
                 const updatedTask = result.rows[0]
-                res.status(200).json(updatedTask)
+                console.log(updatedTask)
+                res.status(200).send(updatedTask)
             }
         )
     }

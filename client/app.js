@@ -121,14 +121,14 @@ function displayTasks() {
                 const taskCard = $('<div></div>').attr('class', 'task-card')
                 if (task.completed === false) {
                     taskCard.text(`${tasks} `)
-                    const deleteBtn = $('<button>x</i></button>')
+                    const deleteBtn = $('<button>x</button>')
                         .attr('data-task-id', task.task_id)
                         .attr('class', 'delete_task')
                     const container = $('<div></div>').attr(
                         'class',
                         'task-container'
                     )
-                    const completedBtn = $('<button>To-Do</i></button>')
+                    const completedBtn = $('<button>To-Do</button>')
                         .attr('data-task-id', task.task_id)
                         .attr('id', task.user_id)
                         .attr('data-task-complete', task.completed)
@@ -140,12 +140,12 @@ function displayTasks() {
                     $results.append($incomplete)
                 } else {
                     taskCard.text(`${tasks}  `)
-                    const completedBtn = $('<button>Done</i></button>')
+                    const completedBtn = $('<button>Done</button>')
                         .attr('data-task-id', task.task_id)
                         .attr('id', task.user_id)
                         .attr('data-task-complete', task.completed)
                         .attr('class', 'completed_task')
-                    const deleteBtn = $('<button>x</i></button>')
+                    const deleteBtn = $('<button>x</button>')
                         .attr('data-task-id', task.task_id)
                         .attr('class', 'delete_task')
                     const container = $('<div></div>').attr(
@@ -209,9 +209,9 @@ function newTask() {
                 .attr('data-task-id', data['task_id'])
                 .attr('id', data['user_id'])
                 .attr('data-task-complete', data['completed'])
-                .attr('class', 'completed_task')
+                .attr('class', 'incomplete_task')
             taskCard.prepend(completedBtn)
-            taskCard.append(deleteBtn)
+            taskCard.prepend(deleteBtn)
             container.append(taskCard)
             $incomplete.append(container)
             $results.append($incomplete)
@@ -272,7 +272,7 @@ function completedOrNah(event) {
                     'class',
                     'task-container'
                 )
-                const completedBtn = $('<button>To-Do</i></button>')
+                const completedBtn = $('<button>To-Do</button>')
                     .attr('data-task-id', data['task_id'])
                     .attr('id', data['user_id'])
                     .attr('data-task-complete', false)
@@ -287,14 +287,14 @@ function completedOrNah(event) {
                 let tasks = data['todo']
                 const taskCard = $('<div></div>').attr('class', 'task-card')
                 taskCard.text(`${tasks}`)
-                const deleteBtn = $('<button>x</i></button>')
+                const deleteBtn = $('<button>x</button>')
                     .attr('data-task-id', `${data['task_id']}`)
                     .attr('class', 'delete_task')
                 const container = $('<div></div>').attr(
                     'class',
                     'task-container'
                 )
-                const completedBtn = $('<button>Done</i></button>')
+                const completedBtn = $('<button>Done</button>')
                     .attr('data-task-id', data['task_id'])
                     .attr('id', data['user_id'])
                     .attr('data-task-complete', true)
