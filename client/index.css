@@ -33,6 +33,7 @@ button {
 }
 .task-container {
     border: 2px solid black;
+    background-color: white;
     display: inline-flex;
     margin-right: 10px;
     border-radius: 20px;
@@ -74,10 +75,32 @@ button {
 #not_complete {
     order: 1;
     flex-grow: 1;
-    width: 50%;
+    width: 40%;
+    border: solid;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: #e74646a4;
+    margin-right: 10px;
 }
 #complete {
     order: 2;
     flex-grow: 1;
-    width: 50%;
+    width: 40%;
+    background-color: #e8f3d6db;
+    border: solid;
+    padding: 10px;
+    border-radius: 20px;
+}
+.incomplete_task {
+    background-color: #e74646ee;
+}
+button:hover {
+    text-decoration: wavy;
+}
+.intro2Container {
+    display: flex;
+    justify-content: space-evenly;
+}
+h1 {
+    font-size: 50px;
 }

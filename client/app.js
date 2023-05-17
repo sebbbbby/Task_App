@@ -1,6 +1,6 @@
 const $results = $('#results')
 const $welcome = $('#welcome')
-const myButton = $('#myButton')
+// const myButton = $('#myButton')
 const tasks = $('#myButton1')
 const user_task = $('.user_task_btn')
 const $createUserBtn = $('#new_email')
@@ -10,9 +10,15 @@ const $taskCard = $('.task-card')
 const $incomplete = $('#not_complete')
 const $complete = $('#complete')
 const $NewTaskSearch = $('#NewTaskSearch')
+const $taskContainer = $('.task-container')
+const $beGone = $('.beGone')
 const URL = 'https://task-app-by-seb.onrender.com/'
-$results.on('click', '.delete_task', deleteTask)
 
+//i want to change below
+$(document).ready(function () {
+    $('#not_complete').hide()
+    $('#complete').hide()
+})
 function createUser() {
     const user_email = $userInput.val()
 
@@ -61,23 +67,22 @@ function signin() {
         .then((response) => response.json())
         .then((data) => {
             console.log(data)
-            // taskBtn.empty();
+
             if (data === 'USER NOT FOUND' || data === 0 || data === undefined) {
                 alert('USER NOT FOUND!!!')
             } else {
                 // console.log(data);
+                $beGone.remove()
                 $welcome.empty()
 
                 let email = data['user_email']
-                const welcomeCard = $('<h2></h2>')
+                const welcomeCard = $('<h1></h1>')
                     .attr('class', 'welcome-card')
-                    .text(` Welcome, ${email} `)
-                const taskBtn = $('<button>CHECK YOUR TASKS</button>')
                     .attr('id', `${data['user_id']}`)
-                    .attr('class', 'user_task_btn')
-                $results.find('.user_task_btn').remove()
+                    .text(` Welcome, ${email} `)
                 $welcome.append(welcomeCard)
-                $results.append(taskBtn)
+
+                displayTasks()
             }
         })
         .catch((error) => {
@@ -89,27 +94,33 @@ function signin() {
         })
 }
 
-myButton.on('click', () => {
-    signin()
-})
+// myButton.on('click', () => {
+//     signin()
+// })
 $userInputSignin.on('keypress', (event) => {
     if (event.key === 'Enter') {
         event.preventDefault()
         signin()
     }
 })
+// what happens after you sign in then populate all the tasks to that user
 
-$results.on('click', '.user_task_btn', () => {
-    const userId = $('.user_task_btn').attr('id')
+function displayTasks() {
+    const userId = $('.welcome-card').attr('id')
     fetch(`${URL}tasks/${userId}`)
         .then((response) => response.json())
         .then((data) => {
+            $('#not_complete').show()
+            $('#complete').show()
             $results.empty()
+            $incomplete.empty()
+            $complete.empty()
+            $NewTaskSearch.empty()
             for (let task of data) {
                 let tasks = task['todo']
                 const taskCard = $('<div></div>').attr('class', 'task-card')
                 if (task.completed === false) {
-                    taskCard.text(`${tasks} ⭕ `)
+                    taskCard.text(`${tasks} `)
                     const deleteBtn = $('<button>x</i></button>')
                         .attr('data-task-id', task.task_id)
                         .attr('class', 'delete_task')
@@ -117,13 +128,23 @@ $results.on('click', '.user_task_btn', () => {
                         'class',
                         'task-container'
                     )
-
-                    taskCard.append(deleteBtn)
+                    const completedBtn = $('<button>To-Do</i></button>')
+                        .attr('data-task-id', task.task_id)
+                        .attr('id', task.user_id)
+                        .attr('data-task-complete', task.completed)
+                        .attr('class', 'incomplete_task')
+                    taskCard.prepend(completedBtn)
+                    taskCard.prepend(deleteBtn)
                     container.append(taskCard)
                     $incomplete.append(container)
                     $results.append($incomplete)
                 } else {
-                    taskCard.text(`${tasks} ✅ `)
+                    taskCard.text(`${tasks}  `)
+                    const completedBtn = $('<button>Done</i></button>')
+                        .attr('data-task-id', task.task_id)
+                        .attr('id', task.user_id)
+                        .attr('data-task-complete', task.completed)
+                        .attr('class', 'completed_task')
                     const deleteBtn = $('<button>x</i></button>')
                         .attr('data-task-id', task.task_id)
                         .attr('class', 'delete_task')
@@ -131,8 +152,8 @@ $results.on('click', '.user_task_btn', () => {
                         'class',
                         'task-container'
                     )
-
-                    taskCard.append(deleteBtn)
+                    taskCard.prepend(completedBtn)
+                    taskCard.prepend(deleteBtn)
                     container.append(taskCard)
                     $complete.append(container)
                     $results.append($complete)
@@ -157,7 +178,7 @@ $results.on('click', '.user_task_btn', () => {
         .catch((error) => {
             console.error('Error:', error)
         })
-})
+}
 // $results.on("submit", "form", (event) => {
 //   event.preventDefault();
 //   newTask();
@@ -179,12 +200,17 @@ function newTask() {
             let tasks = data['todo']
             console.log(tasks)
             const taskCard = $('<div></div>').attr('class', 'task-card')
-            taskCard.text(`${tasks} ⭕ `)
+            taskCard.text(`${tasks}`)
             const deleteBtn = $('<button>x</i></button>')
                 .attr('data-task-id', `${data['task_id']}`)
                 .attr('class', 'delete_task')
             const container = $('<div></div>').attr('class', 'task-container')
-
+            const completedBtn = $('<button>To-Do</i></button>')
+                .attr('data-task-id', data['task_id'])
+                .attr('id', data['user_id'])
+                .attr('data-task-complete', data['completed'])
+                .attr('class', 'completed_task')
+            taskCard.prepend(completedBtn)
             taskCard.append(deleteBtn)
             container.append(taskCard)
             $incomplete.append(container)
@@ -207,13 +233,91 @@ $NewTaskSearch.on('keypress', '.newTodoText', (event) => {
         $newTodoText.val('')
     }
 })
-console.log('hello')
+
+//need a function to switch the true/false statements to the correct div
+$results.on('click', '.incomplete_task', completedOrNah)
+$results.on('click', '.completed_task', completedOrNah)
+function completedOrNah(event) {
+    console.log($(event.target).data('task-id'))
+    console.log($(event.target).attr('id'))
+    console.log($(event.target).data('task-complete'))
+    const userId = $(event.target).attr('id')
+    const taskId = $(event.target).data('task-id')
+    const completed = $(event.target).data('task-complete')
+    fetch(`/tasks/${userId}/${taskId}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ completed: completed }),
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Task change failed.')
+            }
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data)
+            const taskCardUpdate = event.target.closest('.task-container')
+            taskCardUpdate.remove()
+            if (data['completed'] === false) {
+                let tasks = data['todo']
+                const taskCard = $('<div></div>').attr('class', 'task-card')
+                taskCard.text(`${tasks}`)
+                const deleteBtn = $('<button>x</i></button>')
+                    .attr('data-task-id', `${data['task_id']}`)
+                    .attr('class', 'delete_task')
+                const container = $('<div></div>').attr(
+                    'class',
+                    'task-container'
+                )
+                const completedBtn = $('<button>To-Do</i></button>')
+                    .attr('data-task-id', data['task_id'])
+                    .attr('id', data['user_id'])
+                    .attr('data-task-complete', false)
+                    .attr('class', 'incomplete_task')
+                taskCard.prepend(completedBtn)
+                // $taskContainer.append(completed)
+                taskCard.prepend(deleteBtn)
+                container.append(taskCard)
+                $incomplete.append(container)
+                $results.append($incomplete)
+            } else {
+                let tasks = data['todo']
+                const taskCard = $('<div></div>').attr('class', 'task-card')
+                taskCard.text(`${tasks}`)
+                const deleteBtn = $('<button>x</i></button>')
+                    .attr('data-task-id', `${data['task_id']}`)
+                    .attr('class', 'delete_task')
+                const container = $('<div></div>').attr(
+                    'class',
+                    'task-container'
+                )
+                const completedBtn = $('<button>Done</i></button>')
+                    .attr('data-task-id', data['task_id'])
+                    .attr('id', data['user_id'])
+                    .attr('data-task-complete', true)
+                    .attr('class', 'completed_task')
+                taskCard.prepend(completedBtn)
+                taskCard.prepend(deleteBtn)
+                container.append(taskCard)
+                $complete.append(container)
+                $results.append($complete)
+            }
+        })
+        .catch((error) => {
+            console.error(error)
+        })
+}
+
 // delete button specific to the user
+$results.on('click', '.delete_task', deleteTask)
 function deleteTask(event) {
     const taskId = $(event.target).data('task-id')
 
     if (confirm('Are you sure you want to delete this task?')) {
-        fetch(`/tasks/${taskId}`, { method: 'DELETE' })
+        fetch(`${URL}tasks/${taskId}`, { method: 'DELETE' })
             .then((response) => response.json())
             .then((data) => {
                 alert('Task deleted!')
@@ -225,36 +329,10 @@ function deleteTask(event) {
             })
     }
 }
-
-//create new post for the specific user
-
-//------------------------------------------------------------------------
-// //GET ALL TASKS
-// tasks.on("click", () => {
-//   // console.log("hello");
-
-//   // const userInput = prompt("type your email:");
-//   fetch(`/tasks`)
-//     .then((response) => response.json())
-//     .then((data) => {
-//       $results.empty();
-//       for (let tasks of data) {
-//         // console.log(tasks);
-//         console.log(tasks.completed);
-//         if (tasks.completed === false) {
-//           const taskCard = $("<h2></h2>")
-//             .attr("class", "task-card")
-//             .text(`${tasks.todo} GET TO WORK`);
-//           $results.append(taskCard);
-//         } else {
-//           const taskCard = $("<h2></h2>")
-//             .attr("class", "task-card")
-//             .text(`${tasks.todo} COMPLETED`);
-//           $results.append(taskCard);
-//         }
-//       }
-//     })
-//     .catch((error) => {
-//       console.error("Error:", error);
-//     });
-// });
+// Create the "complete" div
+// const $complete = $('<div></div>').attr('id', 'complete')
+// $results.append($complete)
+// const userId = $('.welcome-card').attr('id')
+//will use in future patches
+// const $incomplete = $('<div></div>').attr('id', 'not_complete')
+// $results.append($incomplete)

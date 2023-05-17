@@ -68,37 +68,9 @@ app.get('/tasks/:user_id', (req, res) => {
     )
 })
 
-app.patch('/tasks/:user_id/:task_id', (req, res) => {
-    const userId = req.params.user_id
-    const taskId = req.params.task_id
-    const { todo, completed } = req.body
-    // console.log(updatedTask);
-    db.query(
-        'UPDATE task SET todo = COALESCE($1, todo), completed= COALESCE( $2, completed) WHERE user_id = $3 AND task_id =$4 ',
-        [todo, completed, userId, taskId],
-        (error, result) => {
-            if (error) {
-                throw error
-            }
-            //missing what to send to front end
-            db.query(
-                'SELECT * FROM task WHERE user_id = $1 AND task_id = $2',
-                [userId, taskId],
-                (error, result) => {
-                    if (error) {
-                        throw error
-                    }
-                    res.status(200).json(result.rows[0])
-                }
-            )
-        }
-    )
-})
-
 app.delete('/tasks/:task_id', (req, res) => {
     // const userId = req.params.user_id;
     const taskId = req.params.task_id
-    // console.log(taskId)
     db.query(
         'DELETE FROM task WHERE task_id =$1 ',
         [taskId],
@@ -115,7 +87,6 @@ app.delete('/tasks/:task_id', (req, res) => {
 app.post('/newuser', (req, res) => {
     const userInputObj = req.body
     const newUserEmail = userInputObj['user_email']
-    console.log(newUserEmail)
     db.query(
         'SELECT * FROM users WHERE user_email = $1',
         [newUserEmail],
@@ -156,7 +127,6 @@ app.post('/newuser', (req, res) => {
 app.post('/newtask/:user_id', (req, res) => {
     const newTask = req.body['newTaskInput']
     const UserId = req.params.user_id
-    console.log(newTask)
     db.query(
         'INSERT INTO task (todo, user_id) VALUES ($1, $2) RETURNING *',
         [newTask, UserId],
@@ -170,20 +140,46 @@ app.post('/newtask/:user_id', (req, res) => {
         }
     )
 })
-
+//changing from true-false-true
+app.patch('/tasks/:user_id/:task_id', (req, res) => {
+    const userId = req.params.user_id
+    const taskId = req.params.task_id
+    const { completed } = req.body
+    const vtrue = true
+    const vfalse = false
+    console.log(completed)
+    if (completed === false) {
+        db.query(
+            'UPDATE task SET completed = $1 WHERE user_id = $2 AND task_id = $3 RETURNING *',
+            [vtrue, userId, taskId],
+            (error, result) => {
+                if (error) {
+                    console.error(error)
+                    res.status(500).send('Internal server error.')
+                    return
+                }
+                //return the task to be added appropraitely
+                const updatedTask = result.rows[0]
+                res.status(200).json(updatedTask)
+            }
+        )
+    } else {
+        db.query(
+            'UPDATE task SET completed = $1 WHERE user_id = $2 AND task_id = $3 RETURNING *',
+            [vfalse, userId, taskId],
+            (error, result) => {
+                if (error) {
+                    console.error(error)
+                    res.status(500).send('Internal server error.')
+                    return
+                }
+                //return the task to be added appropraitely
+                const updatedTask = result.rows[0]
+                res.status(200).json(updatedTask)
+            }
+        )
+    }
+})
 app.listen(PORT, () => {
     console.log('listening to ' + PORT)
 })
-
-//-------------graveyard-----------------------//
-
-// this was in the beginning where i wanted to test button features and more
-// app.get("/users", (req, res) => {
-//   db.query("SELECT * FROM users", [], (error, result) => {
-//     if (error) {
-//       throw error;
-//     }
-//     let email = result["rows"];
-//     res.send(email);
-//   });
-// });
