@@ -13,6 +13,7 @@ const $NewTaskSearch = $('#NewTaskSearch')
 const $taskContainer = $('.task-container')
 const $beGone = $('.beGone')
 const URL = 'https://task-app-by-seb.onrender.com/'
+const $signUpContainer = $('#sign_up_container')
 
 //i want to change below
 $(document).ready(function () {
@@ -74,6 +75,7 @@ function signin() {
                 // console.log(data);
                 $beGone.remove()
                 $welcome.empty()
+                $signUpContainer.hide()
 
                 let email = data['user_email']
                 const welcomeCard = $('<h1></h1>')
