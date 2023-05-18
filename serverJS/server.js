@@ -10,7 +10,8 @@ const app = express()
 const PORT = 4000
 dotenv.config()
 app.use(cors())
-app.use(express.static('../client'))
+// app.use(express.static('../client'))
+app.use(express.static('client'))
 app.use(express.json())
 
 app.use((err, req, res, next) => {
